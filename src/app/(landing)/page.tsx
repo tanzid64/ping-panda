@@ -1,7 +1,10 @@
 import { Heading } from "@/components/global/heading";
 import { MaxWidthWrapper } from "@/components/global/max-width-wrapper";
 import { ShinyButton } from "@/components/global/shiny-button";
-import { Check,  } from "lucide-react";
+import { MocDiscordUI } from "@/components/landing/moc-discord-ui";
+import { DiscordMessage } from "@/components/landing/moc-discord-ui/discord-message";
+import { AnimatedList } from "@/components/ui/animated-list";
+import { Check } from "lucide-react";
 import { FC } from "react";
 
 const Page: FC = () => {
@@ -55,7 +58,60 @@ const Page: FC = () => {
           </div>
         </MaxWidthWrapper>
       </section>
-      <section></section>
+      {/* Brand Photo Section */}
+      <section className="relative bg-brand-25 pb-4">
+        <div className="absolute inset-x-0 bottom-24 top-24 bg-brand-700" />
+        <div className="relative mx-auto">
+          <MaxWidthWrapper className="relative">
+            <div className="-m-2 rounded-xl bg-gray-900/5 p-2 ring-1 ring-inset ring-gray-900/10 lg:-m-4 lg:rounded-2xl lg:p-4">
+              <MocDiscordUI>
+                <AnimatedList>
+                  <DiscordMessage
+                    avatarSrc="/brand-asset-profile-picture.png"
+                    avatarAlt="PingPanda Avatar"
+                    username="PingPanda"
+                    timestamp="Today at 12:34 PM"
+                    badgeText="SignUp"
+                    badgeColor="#faa61a"
+                    title="👤 New user signed up"
+                    content={{
+                      name: "John Doe",
+                      email: "jhon_doe@tanzid.xyz",
+                    }}
+                  />
+                  <DiscordMessage
+                    avatarSrc="/brand-asset-profile-picture.png"
+                    avatarAlt="PingPanda Avatar"
+                    username="PingPanda"
+                    timestamp="Today at 10:34 PM"
+                    badgeText="Revenue"
+                    badgeColor="#43b581"
+                    title="💰 Payment Received"
+                    content={{
+                      amount: "$49.00",
+                      plan: "PRO",
+                      email: "jhon_doe@tanzid.xyz",
+                    }}
+                  />
+                  <DiscordMessage
+                    avatarSrc="/brand-asset-profile-picture.png"
+                    avatarAlt="PingPanda Avatar"
+                    username="PingPanda"
+                    timestamp="Today at 5:11 PM"
+                    badgeText="Milestone"
+                    badgeColor="#5865f2"
+                    title="🚀 Revenue Milestone Achived"
+                    content={{
+                      recurringRevenue: "$5000.00",
+                      growth: "+8.2%"
+                    }}
+                  />
+                </AnimatedList>
+              </MocDiscordUI>
+            </div>
+          </MaxWidthWrapper>
+        </div>
+      </section>
       <section></section>
       <section></section>
     </>
