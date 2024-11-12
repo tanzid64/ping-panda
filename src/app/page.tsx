@@ -1,8 +1,8 @@
-import { Check } from "lucide-react";
+import { Heading } from "@/components/global/heading";
+import { MaxWidthWrapper } from "@/components/global/max-width-wrapper";
+import { ShinyButton } from "@/components/global/shiny-button";
+import { Check,  } from "lucide-react";
 import { FC } from "react";
-import { Heading } from "./components/global/heading";
-import { MaxWidthWrapper } from "./components/global/max-width-wrapper";
-import { ShinyButton } from "./components/global/shiny-button";
 
 const Page: FC = () => {
   return (
