@@ -2,7 +2,7 @@
 import { Heading } from "@/components/global/heading";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft } from "lucide-react";
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 import { FC, ReactNode } from "react";
 
 interface DashboardPageComponentProps {
