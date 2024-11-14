@@ -1,9 +1,9 @@
+import { parseColor } from "@/lib/utils";
+import { CATEGORY_NAME_VALIDATOR } from "@/lib/validators/category-validator";
 import { startOfMonth } from "date-fns";
 import { z } from "zod";
 import { router } from "../__internals/router";
 import { privateProcedure } from "../procedures";
-import { CATEGORY_NAME_VALIDATOR } from "@/lib/validators/category-validator";
-import { parseColor } from "@/lib/utils";
 
 export const categoryRouter = router({
   getEventCategories: privateProcedure.query(async ({ c, ctx }) => {
@@ -114,4 +114,31 @@ export const categoryRouter = router({
 
       return c.json({ eventCategory });
     }),
+
+  insertQuickStartCategories: privateProcedure.mutation(async ({ c, ctx }) => {
+    const categories = await ctx.db.eventCategory.createMany({
+      data: [
+        {
+          name: "Bug",
+          emoji: "🐞",
+          color: 0xff6b6b,
+        },
+        {
+          name: "Sale",
+          emoji: "💰",
+          color: 0xffeb3b,
+        },
+        {
+          name: "Question",
+          emoji: "🤔",
+          color: 0x6c5ce7,
+        },
+      ].map((category) => ({
+        ...category,
+        userId: ctx.user.id,
+      })),
+    });
+
+    return c.json({ success: true, count: categories.count });
+  }),
 });
