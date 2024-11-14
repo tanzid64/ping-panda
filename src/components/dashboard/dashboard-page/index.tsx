@@ -20,20 +20,22 @@ export const DashboardPageComponent: FC<DashboardPageComponentProps> = ({
   return (
     <section className="flex-1 h-full w-full flex flex-col">
       <div className="p-6 sm:p-8 flex justify-between border-b border-gray-200">
-        <div className="flex flex-row sm:items-center gap-y-2 gap-x-6">
+        <div className="flex flex-col items-start gap-y-6">
           {/* Back Button */}
-          {hideBackButton ? null : (
-            <Button className="w-fit bg-white" variant={"outline"}>
-              <ArrowLeft className="size-4" />
-            </Button>
-          )}
+          <div className="flex items-center gap-8">
+            {hideBackButton ? null : (
+              <Button className="w-fit bg-white" variant={"outline"}>
+                <ArrowLeft className="size-4" />
+              </Button>
+            )}
 
-          <Heading>{title}</Heading>
+            <Heading>{title}</Heading>
+          </div>
 
           {cta ? <div>{cta}</div> : null}
         </div>
       </div>
-      
+
       <div className="flex-1 p-6 sm:p-8 flex flex-col overflow-y-auto">
         {children}
       </div>
