@@ -67,6 +67,7 @@ export const CreateEventCategoryModal: FC<CreateEventCategoryModalProps> = ({
     formState: { errors },
     watch,
     setValue,
+    reset,
   } = useForm<EventCategoryForm>({
     resolver: zodResolver(EVENT_CATEGORY_VALIDATOR),
   });
@@ -78,6 +79,7 @@ export const CreateEventCategoryModal: FC<CreateEventCategoryModalProps> = ({
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["user-event-categories"] });
       setIsOpen(false);
+      reset();
     },
   });
 
