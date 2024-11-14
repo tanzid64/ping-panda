@@ -6,7 +6,7 @@ import Link from "next/link";
 import { FC } from "react";
 
 interface SidebarProps {
-  onClose: () => void;
+  onClose?: () => void;
 }
 
 interface SidebarItem {
