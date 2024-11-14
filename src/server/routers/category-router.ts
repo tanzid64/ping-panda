@@ -1,4 +1,5 @@
 import { startOfMonth } from "date-fns";
+import { z } from "zod";
 import { router } from "../__internals/router";
 import { privateProcedure } from "../procedures";
 
@@ -71,4 +72,15 @@ export const categoryRouter = router({
     // super json can handle dates but json can't -> more in superjson documentation
     return c.superjson({ categories: categoriesWithCounts });
   }),
+
+  deleteCategory: privateProcedure
+    .input(z.object({ name: z.string() }))
+    .mutation(async ({ c, ctx, input }) => {
+      const { name } = input;
+
+      await ctx.db.eventCategory.delete({
+        where: { name_userId: { name, userId: ctx.user.id } },
+      });
+      return c.json({ success: true });
+    }),
 });
