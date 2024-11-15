@@ -1,6 +1,7 @@
 import { parseColor } from "@/lib/utils";
 import { CATEGORY_NAME_VALIDATOR } from "@/lib/validators/category-validator";
 import { startOfMonth } from "date-fns";
+import { HTTPException } from "hono/http-exception";
 import { z } from "zod";
 import { router } from "../__internals/router";
 import { privateProcedure } from "../procedures";
@@ -119,17 +120,17 @@ export const categoryRouter = router({
     const categories = await ctx.db.eventCategory.createMany({
       data: [
         {
-          name: "Bug",
+          name: "bug",
           emoji: "🐞",
           color: 0xff6b6b,
         },
         {
-          name: "Sale",
+          name: "sale",
           emoji: "💰",
           color: 0xffeb3b,
         },
         {
-          name: "Question",
+          name: "question",
           emoji: "🤔",
           color: 0x6c5ce7,
         },
@@ -141,4 +142,26 @@ export const categoryRouter = router({
 
     return c.json({ success: true, count: categories.count });
   }),
+
+  pollCategory: privateProcedure
+    .input(z.object({ name: CATEGORY_NAME_VALIDATOR }))
+    .query(async ({ c, ctx, input }) => {
+      const { name } = input;
+
+      const category = await ctx.db.eventCategory.findUnique({
+        where: { name_userId: { name, userId: ctx.user.id } },
+        include: {
+          _count: {
+            select: {
+              events: true,
+            },
+          },
+        },
+      });
+      if (!category)
+        throw new HTTPException(404, { message: "Category not found" });
+
+      const hasEvents = category._count.events > 0;
+      return c.json({ hasEvents });
+    }),
 });
