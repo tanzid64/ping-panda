@@ -14,26 +14,28 @@ const REQUEST_VALIDATOR = z
   .strict();
 
 export const POST = async (req: NextRequest) => {
-  const authHeader = req.headers.get("Authorization");
-
-  if (!authHeader) {
-    return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
-  }
-
-  if (!authHeader.startsWith("Bearer ")) {
-    return NextResponse.json(
-      { message: "Invalid auth header format. Expected: 'Bearer <API_KEY>'" },
-      { status: 401 }
-    );
-  }
-
-  const apiKey = authHeader.split(" ")[1]; // bearer <API_KEY>
-
-  if (!apiKey || apiKey.trim() === "") {
-    return NextResponse.json({ message: "Invalid API key" }, { status: 401 });
-  }
-
   try {
+    // Get api key from request header
+    const authHeader = req.headers.get("Authorization");
+
+    if (!authHeader) {
+      return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
+    }
+
+    if (!authHeader.startsWith("Bearer ")) {
+      return NextResponse.json(
+        { message: "Invalid auth header format. Expected: 'Bearer <API_KEY>'" },
+        { status: 401 }
+      );
+    }
+
+    const apiKey = authHeader.split(" ")[1]; // bearer <API_KEY>
+
+    if (!apiKey || apiKey.trim() === "") {
+      return NextResponse.json({ message: "Invalid API key" }, { status: 401 });
+    }
+
+    // Find user in the db through validate api key
     const user = await db.user.findUnique({
       where: { apiKey },
       include: { eventCategories: true },
@@ -185,6 +187,9 @@ export const POST = async (req: NextRequest) => {
     );
   } catch (error) {
     console.log(error);
+    if (error instanceof z.ZodError) {
+      return NextResponse.json({ message: error.message }, { status: 422 });
+    }
     return NextResponse.json(
       { message: "Internal server error" },
       { status: 500 }
