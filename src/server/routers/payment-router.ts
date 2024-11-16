@@ -9,6 +9,11 @@ export const paymentRouter = router({
       userEmail: user.email,
       userId: user.id,
     });
+    console.log(session);
     return c.json({ url: session.url });
+  }),
+  getUserPlan: privateProcedure.query(async ({ c, ctx }) => {
+    const { user } = ctx;
+    return c.json({ plan: user.plan });
   }),
 });
