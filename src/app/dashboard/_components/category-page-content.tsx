@@ -30,8 +30,8 @@ import {
 } from "@tanstack/react-table";
 import { isAfter, isToday, startOfMonth, startOfWeek } from "date-fns";
 import { ArrowUpDown, BarChart } from "lucide-react";
-import { useSearchParams } from "next/navigation";
-import { FC, useMemo, useState } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
+import { FC, useEffect, useMemo, useState } from "react";
 import { EmptyCategoryState } from "./empty-category-state";
 
 interface CategoryPageContentProps {
@@ -63,10 +63,6 @@ export const CategoryPageContent: FC<CategoryPageContentProps> = ({
       hasEvents: initialHasEvents,
     },
   });
-
-  if (!pollingData.hasEvents) {
-    return <EmptyCategoryState categoryName={category.name} />;
-  }
 
   // Fetch data
   const { data, isFetching } = useQuery({
@@ -176,6 +172,15 @@ export const CategoryPageContent: FC<CategoryPageContentProps> = ({
     },
   });
 
+  const router = useRouter();
+
+  useEffect(() => {
+    const searchParams = new URLSearchParams(window.location.search);
+    searchParams.set("page", (pagination.pageIndex + 1).toString());
+    searchParams.set("limit", pagination.pageSize.toString());
+    router.push(`?${searchParams.toString()}`, { scroll: false });
+  }, [pagination, router]);
+
   // Format data
   // -> useMemo used for not to calculate every render
   // -> only want to run this when data changes
@@ -265,7 +270,9 @@ export const CategoryPageContent: FC<CategoryPageContentProps> = ({
       );
     });
   };
-
+  if (!pollingData.hasEvents) {
+    return <EmptyCategoryState categoryName={category.name} />;
+  }
   return (
     <div className="space-y-6">
       <Tabs
