@@ -38,7 +38,7 @@ export const Navbar: FC = async () => {
             ) : (
               <>
                 <Link
-                  href="/dashboard"
+                  href="/pricing"
                   className={buttonVariants({
                     size: "sm",
                     variant: "ghost",
